@@ -1,8 +1,8 @@
 const shop1 = {
   shopInfo: {
     shopType: "grocery-shop",
-    shopId: "FI5678G3",
     shopTitle: "kmarket",
+    shopId: "FI5678G3",
     shopAddress: "lipstikkakuja-1a-02100-Vantaa-Finland",
     shopContact: "+358 414352376",
     vat: 14,
@@ -22,8 +22,8 @@ const shop1 = {
 const shop2 = {
   shopInfo: {
     shopType: "accessories-shop",
-    shopId: "FI7678L2",
     shopTitle: "giganti",
+    shopId: "FI7678L2",
     shopAddress: "Elmontie-43-65200-Tampere-Finland",
     shopContact: "+358 419822393",
     vat: 25.5,
@@ -43,8 +43,8 @@ const shop2 = {
 const shop3 = {
   shopInfo: {
     shopType: "liquor-shop",
-    shopId: "FI0928A8",
     shopTitle: "alko",
+    shopId: "FI0928A8",
     shopAddress: "sturenkatu-21-31205-Helsinki-Finland",
     shopContact: "+358 412789393",
     vat: 25.5,
@@ -64,8 +64,8 @@ const shop3 = {
 const shop4 = {
   shopInfo: {
     shopType: "cloths-shop",
-    shopId: "FI4392A2",
     shopTitle: "xxl",
+    shopId: "FI4392A2",
     shopAddress: "Palosaarentie-62-39745-Vaasa-Finland",
     shopContact: "+358 417097234",
     vat: 24,
@@ -84,7 +84,7 @@ const shop4 = {
 
 let shops = [shop1, shop2, shop3, shop4];
 let currentShop;
-let orders = {};
+let orders = [];
 
 const displayShopTitles = shops.forEach(function (shop) {
   shopTitles = shop.shopInfo.shopTitle;
@@ -104,14 +104,50 @@ const displayCurrentShopItems = function (curshp) {
 };
 displayCurrentShopItems(currentShop);
 
-const getOrder = function (curshp) {
-  let order = {};
-  let orderArr = [];
+const getOrderedItemQuantity = function (curshp) {
+  let orderedQuantity = ["quantity"];
   let item = prompt("Pick item: ");
-  let quantity = prompt(`What quantity of ${item}: `);
-  const test = Object.entries(curshp.shopItems).filter((ts) => ts[0] === item);
-  console.log(test[0]);
-
-  console.log(res2);
+  let quantity = orderedQuantity.push(
+    Number(prompt(`What quantity of ${item}: `))
+  );
+  let orderedItemQuantity = Object.entries(curshp.shopItems).filter(
+    (ts) => ts[0] === item
+  );
+  orderedItemQuantity.push(orderedQuantity);
+  orders.push(orderedItemQuantity);
 };
-getOrder(currentShop);
+getOrderedItemQuantity(currentShop);
+
+let stillShoppping = true;
+while (stillShoppping) {
+  let question = prompt("Type 'yes' to continue shopping or 'no' to stop: ");
+  question === "yes"
+    ? getOrderedItemQuantity(currentShop)
+    : (stillShoppping = false);
+}
+
+console.clear();
+
+const displaycurrentShopInfo = function (curshp) {};
+displaycurrentShopInfo(currentShop);
+
+let allItemPriceSum = [];
+const displayOrderedItemDetails = function (ords) {
+  ords.forEach(function (ord) {
+    let [item, itemPrice] = ord[0];
+    let [quantity, itemQuantity] = ord[1];
+    let itemPriceSum = itemPrice * itemQuantity;
+    allItemPriceSum.push(itemPriceSum);
+    console.log(`${item} : ${itemPrice}$`);
+    console.log(`${itemQuantity}x ${item} : ${itemPriceSum}$`);
+  });
+};
+
+displayOrderedItemDetails(orders);
+
+console.log(allItemPriceSum);
+
+// FOLLOW UPS
+// Each time user enters an item check in orders array if he already has the item, if the item is there notify
+// and tell user to either edit current amount or so..
+// Round all numbers to 2 deciaml points.....
