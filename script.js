@@ -53,8 +53,8 @@ const shop3 = {
   shopItems: {
     baileys: 78.23,
     vodka: 47.21,
-    redWine: 26.98,
-    whiteWine: 34.78,
+    redwine: 26.98,
+    whitewine: 34.78,
     jackDaniels: 41.99,
     sandels: 15.67,
     whisky: 38.87,
@@ -106,7 +106,7 @@ displayCurrentShopItems(currentShop);
 
 const getOrderedItemQuantity = function (curshp) {
   let orderedQuantity = ["quantity"];
-  let item = prompt("Pick item: ");
+  let item = prompt("Pick item: ").toLowerCase();
   let quantity = orderedQuantity.push(
     Number(prompt(`What quantity of ${item}: `))
   );
@@ -128,7 +128,16 @@ while (stillShoppping) {
 
 console.clear();
 
-const displaycurrentShopInfo = function (curshp) {};
+const displaycurrentShopInfo = function (curshp) {
+  let currentShopInfo = `${curshp.shopInfo.shopTitle}
+
+    ${curshp.shopInfo.shopId}
+
+    ${curshp.shopInfo.shopAddress.split("-")}
+
+    ${curshp.shopInfo.shopContact}`;
+  console.log(currentShopInfo);
+};
 displaycurrentShopInfo(currentShop);
 
 let allItemPriceSum = [];
@@ -138,14 +147,32 @@ const displayOrderedItemDetails = function (ords) {
     let [quantity, itemQuantity] = ord[1];
     let itemPriceSum = itemPrice * itemQuantity;
     allItemPriceSum.push(itemPriceSum);
-    console.log(`${item} : ${itemPrice}$`);
-    console.log(`${itemQuantity}x ${item} : ${itemPriceSum}$`);
+    console.log(`${item}  ${itemPrice}$`);
+    console.log(`${itemQuantity}x ${item}  ${itemPriceSum}$`);
   });
 };
 
 displayOrderedItemDetails(orders);
 
-console.log(allItemPriceSum);
+let vatPerc, vatPric;
+
+const calcVatPrice = function (curshp, alitpric) {
+  vatPerc = curshp.shopInfo.vat;
+  vatPric =
+    (vatPerc / 100) * alitpric.reduce((pric, curpric) => pric + curpric, 0);
+  console.log(`VAT Percent ${vatPerc}%`);
+  console.log(`VAT Amount ${vatPric}$`);
+};
+
+calcVatPrice(currentShop, allItemPriceSum);
+
+const calcTotalPriceWithVat = function (alitpric) {
+  let totalPrice = alitpric.reduce((pric, curpric) => pric + curpric, 0);
+  console.log(`Price without VAT   ${totalPrice}$`);
+  console.log(`Price with VAT ${totalPrice + vatPric}$`);
+};
+
+calcTotalPriceWithVat(allItemPriceSum);
 
 // FOLLOW UPS
 // Each time user enters an item check in orders array if he already has the item, if the item is there notify
